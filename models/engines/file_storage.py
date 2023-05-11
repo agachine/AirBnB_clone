@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import json
-from datetime import datetime
-
+import datetime
 
 class FileStorage:
     __file_path = "file.json"
@@ -29,14 +28,11 @@ class FileStorage:
         try:
             with open(FileStorage.__file_path, 'r') as file:
                 obj_dict = json.load(file)
+                from models.base_model import BaseModel
+                obj_class = {"BaseModel": BaseModel}
                 for key, obj in obj_dict.items():
                     class_name, obj_id = key.split('.')
-                    obj_dict[key]['created_at'] = datetime.datetime.strptime(
-                        obj_dict[key]['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
-                    obj_dict[key]['updated_at'] = datetime.datetime.strptime(
-                        obj_dict[key]['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
-                    obj_class = models[class_name]
-                    FileStorage.__objects[key] = obj_class(**obj)
+                    FileStorage.__objects[key] = obj_class[obj['__class__']](**obj)
         except FileNotFoundError:
             pass
 
