@@ -2,6 +2,7 @@
 import json
 import datetime
 
+
 class FileStorage:
     __file_path = "file.json"
     __objects = {}
@@ -35,4 +36,3 @@ class FileStorage:
                     FileStorage.__objects[key] = obj_class[obj['__class__']](**obj)
         except FileNotFoundError:
             pass
-
