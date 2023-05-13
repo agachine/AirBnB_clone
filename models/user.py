@@ -2,6 +2,7 @@
 """Class user that inherits BaseModel"""
 from models import BaseModel
 
+
 class User:
     email = ""
     password = ""
