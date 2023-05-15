@@ -24,15 +24,17 @@ class FileStorage:
         with open(FileStorage.__file_path, 'w') as file:
             json.dump(obj_dict, file)
 
-    def reload(self):
-        """Deserializes the JSON file to __objects."""
-        try:
-            with open(FileStorage.__file_path, 'r') as file:
-                obj_dict = json.load(file)
-                from models.base_model import BaseModel
-                obj_class = {"BaseModel": BaseModel}
-                for key, obj in obj_dict.items():
-                    class_name, obj_id = key.split('.')
-                    FileStorage.__objects[key] = obj_class[obj['__class__']](**obj)
-        except FileNotFoundError:
-            pass
+   def reload(self):
+    """Deserializes the JSON file to __objects."""
+    try:
+        with open(FileStorage.__file_path, 'r') as file:
+            obj_dict = json.load(file)
+            from models.base_model import BaseModel
+            obj_class = {"BaseModel": BaseModel}
+            for key, obj in obj_dict.items():
+                class_name, obj_id = key.split('.')
+                obj['__class__'] = obj_class.get(obj['__class__'], BaseModel)
+                obj_dict[key] = obj_class[obj['__class__']](**obj)
+            FileStorage.__objects = obj_dict
+    except FileNotFoundError:
+        pass
