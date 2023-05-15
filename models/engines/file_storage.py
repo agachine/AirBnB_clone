@@ -25,31 +25,31 @@ class FileStorage:
             json.dump(obj_dict, file)
 
     def reload(self):
-    """Deserializes the JSON file to __objects."""
-    try:
-        with open(FileStorage.__file_path, 'r') as file:
-            obj_dict = json.load(file)
-            from models.base_model import BaseModel
-            from models.place import Place
-            from models.state import State
-            from models.city import City
-            from models.amenity import Amenity
-            from models.review import Review
-            from models.user import User
+        """Deserializes the JSON file to __objects."""
+        try:
+            with open(FileStorage.__file_path, 'r') as file:
+                obj_dict = json.load(file)
+                from models.base_model import BaseModel
+                from models.place import Place
+                from models.state import State
+                from models.city import City
+                from models.amenity import Amenity
+                from models.review import Review
+                from models.user import User
 
             
             # Add the new classes to obj_class dictionary
-            obj_class = {
-                "BaseModel": BaseModel,
-                "Place": Place,
-                "State": State,
-                "City": City,
-                "Amenity": Amenity,
-                "Review": Review
-            }
+                obj_class = {
+                    "BaseModel": BaseModel,
+                    "Place": Place,
+                    "State": State,
+                    "City": City,
+                    "Amenity": Amenity,
+                    "Review": Review
+                 }
             
-            for key, obj in obj_dict.items():
-                class_name, obj_id = key.split('.')
-                FileStorage.__objects[key] = obj_class[obj['__class__']](**obj)
-    except FileNotFoundError:
-        pass
+                for key, obj in obj_dict.items():
+                    class_name, obj_id = key.split('.')
+                    FileStorage.__objects[key] = obj_class[obj['__class__']](**obj)
+        except FileNotFoundError:
+            pass
