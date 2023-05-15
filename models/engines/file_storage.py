@@ -25,17 +25,29 @@ class FileStorage:
             json.dump(obj_dict, file)
 
     def reload(self):
-        """Deserializes the JSON file to __objects."""
-        try:
-            with open(FileStorage.__file_path, 'r') as file:
-                obj_dict = json.load(file)
-                from models.base_model import BaseModel
-                obj_class = {"BaseModel": BaseModel}
-                for key, obj in obj_dict.items():
-                    class_name, obj_id = key.split('.')
-                    class_name = obj.get('__class__', 'BaseModel')
-                    obj_dict[key] = obj_class[class_name](**obj)
-                FileStorage.__objects = obj_dict
-        except FileNotFoundError:
-            pass
-
+    """Deserializes the JSON file to __objects."""
+    try:
+        with open(FileStorage.__file_path, 'r') as file:
+            obj_dict = json.load(file)
+            from models.base_model import BaseModel
+            from models.place import Place
+            from models.state import State
+            from models.city import City
+            from models.amenity import Amenity
+            from models.review import Review
+            
+            # Add the new classes to obj_class dictionary
+            obj_class = {
+                "BaseModel": BaseModel,
+                "Place": Place,
+                "State": State,
+                "City": City,
+                "Amenity": Amenity,
+                "Review": Review
+            }
+            
+            for key, obj in obj_dict.items():
+                class_name, obj_id = key.split('.')
+                FileStorage.__objects[key] = obj_class[obj['__class__']](**obj)
+    except FileNotFoundError:
+        pass
