@@ -21,22 +21,24 @@ class HBNBCommand(cmd.Cmd):
                 print(new_instance.id)
             except NameError:
                 print("** class doesn't exist **")
-
-    def do_show(self, arg):
-        """Prints the string representation of an instance"""
-        args = arg.split()
+    def do_show(self, args):
+        """Prints the string representation of an instance based on the class name and id"""
         if not args:
             print("** class name missing **")
-        elif args[0] not in storage.classes:
+            return
+        args = args.split()
+        if args[0] not in storage._FileStorage__objects:
             print("** class doesn't exist **")
-        elif len(args) < 2:
+            return
+        if len(args) < 2:
             print("** instance id missing **")
+            return
+        key = args[0] + "." + args[1]
+        if key in storage._FileStorage__objects:
+            print(storage._FileStorage__objects[key])
         else:
-            key = args[0] + "." + args[1]
-            if key in storage.all():
-                print(storage.all()[key])
-            else:
-                print("** no instance found **")
+            print("** no instance found **")
+
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id"""
@@ -55,14 +57,14 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-def do_all(self, arg):
-    """Prints all string representations of instances"""
-    args = arg.split()
-    if args and args[0] not in storage._FileStorage__classes:
-        print("** class doesn't exist **")
-    else:
-        instances = [str(instance) for instance in storage.all().values()]
-        print(instances)
+    def do_all(self, arg):
+        """Prints all string representations of instances"""
+        args = arg.split()
+        if args and args[0] not in storage._FileStorage__classes:
+            print("** class doesn't exist **")
+        else:
+            instances = [str(instance) for instance in storage.all().values()]
+            print(instances)
 
 
     def do_update(self, arg):
