@@ -35,6 +35,8 @@ class FileStorage:
             from models.city import City
             from models.amenity import Amenity
             from models.review import Review
+            from models.user import User
+
             
             # Add the new classes to obj_class dictionary
             obj_class = {
