@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Amenity class inherits BaseModel"""
-from models import *
+from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
