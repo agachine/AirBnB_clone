@@ -50,6 +50,6 @@ class FileStorage:
             
                 for key, obj in obj_dict.items():
                     class_name, obj_id = key.split('.')
-                    FileStorage.__objects[key] = obj_class[obj['__class__']](**obj)
+                    FileStorage.__objects = obj_class[obj['__class__']](**obj)
         except FileNotFoundError:
             pass
