@@ -48,10 +48,9 @@ class FileStorage:
                     "Amenity": Amenity,
                     "Review": Review
                  }
+                obj_dict = {k: self.classes()[v["__class__"]](**v)
+                        for k, v in obj_dict.items()}
+                FileStorage.__objects = obj_dict
 
-                for key, obj in obj_dict.items():
-                    if '__class__' in obj and obj['__class__'] in obj_class:
-                        class_name, obj_id = key.split('.')
-                        FileStorage.__objects = obj_class[obj['__class__']](**obj)
         except FileNotFoundError:
             pass
