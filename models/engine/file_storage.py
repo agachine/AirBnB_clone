@@ -13,7 +13,8 @@ class FileStorage:
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
-        key = obj.__class__.__name__ + "." + obj.id
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        FileStorage.__objects = {}
         FileStorage.__objects[key] = obj
 
     def save(self):
@@ -47,9 +48,10 @@ class FileStorage:
                     "Amenity": Amenity,
                     "Review": Review
                  }
-            
+
                 for key, obj in obj_dict.items():
-                    class_name, obj_id = key.split('.')
-                    FileStorage.__objects = obj_class[obj['__class__']](**obj)
+                    if '__class__' in obj and obj['__class__'] in obj_class:
+                        class_name, obj_id = key.split('.')
+                        FileStorage.__objects = obj_class[obj['__class__']](**obj)
         except FileNotFoundError:
             pass
