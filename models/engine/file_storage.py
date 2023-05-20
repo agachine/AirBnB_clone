@@ -13,9 +13,7 @@ class FileStorage:
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
-        key = "{}.{}".format(type(obj).__name__, obj.id)
-        FileStorage.__objects = {}
-        FileStorage.__objects[key] = obj
+        FileStorage.__objects[obj.__class__.__name__+'.'+str(obj)] = obj
 
     def save(self):
         """Serializes __objects to the JSON file (path: __file_path)."""
@@ -47,7 +45,7 @@ class FileStorage:
                     "Review": Review
                  }
                 obj_dict = {k: obj_class[v["__class__"]](**v)
-                        for k, v in obj_dict.items()}
+                        for k, v in obj_dict.items() if '__class__' in v and v['__class__'] in obj_class}
                 FileStorage.__objects = obj_dict
 
         except FileNotFoundError:
