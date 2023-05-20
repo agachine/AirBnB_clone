@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """This is the base model class for AirBnB"""
-import uuid
+from uuid import uuid4
 from datetime import datetime
 from models import *
 
@@ -13,7 +13,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
-            models.storage.new(self)
+            storage.new(self)
         else:
             for key, value in kwargs.items():
                 if key in ("updated_at", "created_at"):
