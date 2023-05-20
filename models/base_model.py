@@ -37,11 +37,8 @@ class BaseModel:
 
     def to_dict(self):
         """Returns a dictionary representation of BaseModel"""
-        map_objects = {}
-        for key, value in self.__dict__.items():
-            if key == "created_at" or key == "updated_at":
-                map_objects[key] = value.isoformat()
-            else:
-                map_objects[key] = value
-        map_objects["__class__"] = self.__class__.__name__
-        return map_objects
+        my_dict = self.__dict__.copy()
+        my_dict["created_at"] = my_dict["created_at"].isoformat()
+        my_dict["__class__"] = type(self).__name__
+        my_dict["updated_at"] = my_dict["updated_at"].isoformat()
+        return my_dict
