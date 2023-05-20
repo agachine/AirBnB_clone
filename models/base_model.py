@@ -22,7 +22,7 @@ class BaseModel:
     def __str__(self):
         """Returns string representation of BaseModel"""
         return "[{}] ({}) {}".format(
-            self.__class__.__name__, self.id, self.__dict__)
+            type(self).__name__, self.id, self.__dict__)
 
     def save(self):
         """Saves the BaseModel instance"""
