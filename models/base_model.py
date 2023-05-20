@@ -32,7 +32,6 @@ class BaseModel:
     def save(self):
         """Saves the BaseModel instance"""
         self.updated_at = datetime.now()
-        storage.new(self)
         storage.save()
 
     def to_dict(self):
@@ -42,3 +41,12 @@ class BaseModel:
         my_dict["__class__"] = type(self).__name__
         my_dict["updated_at"] = my_dict["updated_at"].isoformat()
         return my_dict
+
+    def to_json(self):
+        """convert to json"""
+        d = self.__dict__.copy()
+        d["created_at"] = str(d["created_at"])
+        if ("updated_at" in d):
+            d["updated_at"] = str(d["updated_at"])
+        d["__class__"] = type(self).__name__
+        return d
