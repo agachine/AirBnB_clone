@@ -21,31 +21,32 @@ class FileStorage:
             d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
             json.dump(d, f)
 
+    def classes(self):
+        """Returns a dictionary of valid classes and their references."""
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.review import Review
+
+        obj_class = {"BaseModel": BaseModel,
+                   "User": User,
+                   "State": State,
+                   "City": City,
+                   "Amenity": Amenity,
+                   "Place": Place,
+                   "Review": Review}
+        return obj_class
+
     def reload(self):
         """Deserializes the JSON file to __objects."""
         try:
             with open(FileStorage.__file_path, 'r') as file:
                 obj_dict = json.load(file)
-                from models.base_model import BaseModel
-                from models.place import Place
-                from models.state import State
-                from models.city import City
-                from models.amenity import Amenity
-                from models.review import Review
-                from models.user import User
-
-            
-            # Add the new classes to obj_class dictionary
-                obj_class = {
-                    "BaseModel": BaseModel,
-                    "Place": Place,
-                    "State": State,
-                    "City": City,
-                    "Amenity": Amenity,
-                    "Review": Review
-                 }
-                obj_dict = {k: obj_class[v["__class__"]](**v)
-                        for k, v in obj_dict.items() if '__class__' in v and v['__class__'] in obj_class}
+                obj_dict = {k: self.classes()[v["__class__"]](**v)
+                        for k, v in obj_dict.items()}
                 FileStorage.__objects = obj_dict
 
         except FileNotFoundError:
