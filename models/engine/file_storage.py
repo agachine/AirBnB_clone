@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 import json
+from models.base_model import BaseModel
+from models.user import User
 import datetime
 
 
@@ -46,11 +48,10 @@ class FileStorage:
     def reload(self):
         """Deserializes the JSON file to __objects."""
         try:
-            with open(FileStorage.__file_path, 'r') as file:
-                obj_dict = json.load(file)
-                obj_dict = {k: self.classes()[v["__class__"]](**v)
-                        for k, v in obj_dict.items()}
-                FileStorage.__objects = obj_dict
-
+            with open(self.__file_path, 'r') as f:
+                dict = json.loads(f.read())
+                for value in dict.values():
+                    cls = value["__class__"]
+                    self.new(eval(cls)(**value))
         except FileNotFoundError:
             pass
